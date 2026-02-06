@@ -9,5 +9,5 @@ def loadGDPfile(dataFilePath):
         raise FileNotFoundError(f"Error: File '{dataFilePath}' not found.")
         
     except Exception as exp:
-        raise Exception(f"Error : {e} in loading the {dataFilePath} file")
+        raise Exception(f"Error : {exp} in loading the {dataFilePath} file")
         
