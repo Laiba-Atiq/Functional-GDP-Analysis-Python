@@ -1,0 +1,12 @@
+import jason as j
+
+def readConfigFile(dataFilePath = "config.json"):
+    try:
+        with open (dataFilePath, "r") as file:
+            configDict = j.load(file)
+
+        return configDict  
+
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Error: config file {dataFilePath} not found")
+              
