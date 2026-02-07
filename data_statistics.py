@@ -26,17 +26,15 @@ def avgGdp(dfc, dfr):
 
   resultCountry = dfc.assign(Avg_of_GDP=(dfc[yearColumns].sum(axis=1))/sizeCountry)
   resultCountry.drop(columns=yearColumns, inplace=True)
-  
+
   ########For regions########
   yearColumnsRegions = list(filter(str.isdigit, dfr.columns))
 
   #the size region is grouped by regions containing number of rows for each continent
   sizeRegion = dfr.groupby("Continent").size()
-  resultRegions = (dfr.groupby("Continent")[yearColumnsRegions]
-                   .sum()
+  resultRegions = (dfr.groupby("Continent")[yearColumnsRegions].sum()
                    .div(sizeRegion,axis=0)
-                   .reset_index()
-                   )
-
+                   .reset_index())
+  
   return resultCountry,resultRegions
   
