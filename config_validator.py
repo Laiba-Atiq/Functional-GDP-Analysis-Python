@@ -32,6 +32,14 @@ def validateConfigSchema(configDict):
     if configDict["output"] not in valid_operations:
         raise ValueError(f"Invalid output: {configDict["output"]} not allowed")
 
+    return configDict
+
+def validateConfigState(configDict, df):
+
+    #creating sets of regions, year and countries
+    regions = set(df["Region"])
+    years = set(df["Year"])
+    countries = set(df["Country Name"])
 
     
 
