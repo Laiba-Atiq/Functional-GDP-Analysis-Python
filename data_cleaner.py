@@ -10,8 +10,8 @@ def dataCleaner(df):
     df = df[ (df["Country Name"]!= "") & df["Country Name"].notna() & df["Country Name"].apply(lambda x: isinstance(x, str)) ]
     
     print("Country Name invalid for", before-len(df), "rows")
-    before=len
-    
+    before=len(df)
+
     #checks if region is valid; df=df[mask]
     df["Continent"]=df["Continent"].str.strip()
     validContinents = {"Africa","Asia","Europe","North America","South America","Oceania","Antarctica", "Global"}
