@@ -60,7 +60,11 @@ def validateConfigState(configDict, df):
 
     return True        
 
-        
+def validateConfig(configDict, df):
+    configDict = validateConfigSchema(config)
+    validateConfigState(configDict, df)
+    return configDict
+    
 
 
 
