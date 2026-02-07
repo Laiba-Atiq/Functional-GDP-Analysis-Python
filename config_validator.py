@@ -23,6 +23,16 @@ def validateConfigSchema(configDict):
     if not isinstance(configDict["output"], str):
         raise TypeError("Error: output in config.json must be an integer")
     
+    #checking valid values
+    validOperations ={ "sum", "average"}
+    if configDict["operation"] not in valid_operations:
+        raise ValueError(f"Invalid operation: {configDict["operation"]} not allowed")
+
+    validOutputs = {"dashboard"}
+    if configDict["output"] not in valid_operations:
+        raise ValueError(f"Invalid output: {configDict["output"]} not allowed")
+
+
     
 
 
