@@ -51,8 +51,13 @@ def validateConfigState(configDict, df):
 
     #creating sets of regions, year and countries
     regions = set(df["Continent"])
-    years = set(df["Year"])
     countries = set(df["Country Name"])
+    years = set(
+        map(int,
+            filter(lambda col: col.isdigit(), df.columns)
+        )
+    )
+
 
     #checking valid values of region, year and country:
     if not all(map(lambda r: r in regions, configDict["region"])):
