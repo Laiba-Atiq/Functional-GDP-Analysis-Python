@@ -17,6 +17,9 @@ def validateConfigSchema(configDict):
     if not isinstance(configDict["country"], list):
         raise TypeError("Error: country in config.json must be a list")
 
+    if not configDict["region"]:
+        raise ValueError("Region is not specified")
+
     #validating data types
     if not all(map(lambda x: isinstance(x, str), configDict["region"])):
         raise TypeError("Error: region in config.json must be a string")
@@ -63,7 +66,6 @@ def validateConfigState(configDict, df):
     if not all(map(lambda c: c in countries, configDict["country"])):
         invalidCountries = list(filter(lambda c: c not in countries, configDict["country"]))
         raise ValueError(f"Invalid country: {invalidCountries} not present in dataset")
-
 
     return True        
 
