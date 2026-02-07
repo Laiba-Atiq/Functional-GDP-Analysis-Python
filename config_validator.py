@@ -7,14 +7,24 @@ def validateConfigSchema(configDict):
         missing = list(filter(lambda k: k not in configDict, keyList))
         raise ValueError(f"Missing keys {missing} in config.json")
 
+    #validating input format as list:
+    if not isinstance(configDict["region"], list):
+        raise TypeError("Error: region in config.json must be a list")
+ 
+    if not isinstance(configDict["year"], list):
+        raise TypeError("Error: year in config.json must be a list")
+
+    if not isinstance(configDict["country"], list):
+        raise TypeError("Error: country in config.json must be a list")
+
     #validating data types
-    if not isinstance(configDict["region"], str):
+    if not all(map(lambda x: isinstance(x, str), configDict["region"])):
         raise TypeError("Error: region in config.json must be a string")
 
-    if not isinstance(configDict["year"], int):
+    if not all(map(lambda x: isinstance(x, int), configDict["year"])):
         raise TypeError("Error: year in config.json must be an integer")
 
-    if not isinstance(configDict["country"], str):
+    if not all(map(lambda x: isinstance(x, str), configDict["country"])):
         raise TypeError("Error: country in config.json must be a string")
 
     if not isinstance(configDict["operation"], str):
@@ -42,21 +52,18 @@ def validateConfigState(configDict, df):
     countries = set(df["Country Name"])
 
     #checking valid values of region, year and country:
-    if configDict["region"] not in regions:
-        raise ValueError(f"Invalid region: {configDict['region']} is not present in the dataset")
+    if not all(map(lambda r: r in regions, configDict["region"])):
+        invalidRegions = list(filter(lambda r: r not in regions, configDict["region"]))
+        raise ValueError(f"Invalid region: {invalidRegions} not present in dataset")
 
-    if configDict["year"] not in years:
-        raise ValueError(f"Invalid year: {configDict['year']} is not present in the dataset")  
+    if not all(map(lambda y: y in years, configDict["year"])):
+        invalidYears = list(filter(lambda y: y not in years, configDict["year"]))  
+        raise ValueError(f"Invalid year: {invalidYears} not present in the dataset")  
 
-    if configDict["country"] not in countries:
-        raise ValueError(f"Invalid country: {configDict['country']} is not present in the dataset")
+    if not all(map(lambda c: c in countries, configDict["country"])):
+        invalidCountries = list(filter(lambda c: c not in countries, configDict["country"]))
+        raise ValueError(f"Invalid country: {invalidCountries} not present in dataset")
 
-    #validaing if the country belogs to the given region:
-    if configDict["country"] != "" and configDict["region"] != "":
-        countryRegions = df[df["Country Name"] == configDict["country"]]["Continent"].unique()
-
-        if len(countryRegions) == 0 or configDict["region"] not in countryRegions:
-            raise ValueError(f"Error: {configDict['country']} does not belong to the region {configDict['region']}")
 
     return True        
 
