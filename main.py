@@ -62,19 +62,20 @@ if st.session_state.page == "stats":
     st.title(":chart_with_upwards_trend: GDP STATISTICS")
 
     #sidebar
-    st.sidebar.title("🔧Configuration Settings")
+    st.sidebar.title("🔧 Configuration:")
 
-    st.sidebar.subheader("🌍 Regions:")
-    list(map(lambda r: st.sidebar.markdown(f" - {r}"), config["region"]))  # ' ' is an em space (U+2003)
+    with st.sidebar.expander("Regions"):
+        st.write(", ".join(config["region"]))
 
-    st.sidebar.subheader("📅 Years:")
-    list(map(lambda y: st.sidebar.markdown(f" - {y}"), config["year"]))
+    with st.sidebar.expander("Years"):
+        st.write(", ".join(map(str, config["year"])))
 
-    st.sidebar.subheader("🏳️ Countries:")
-    list(map(lambda c: st.sidebar.markdown(f" - {c}"), config["country"]))
+    with st.sidebar.expander("Countries"):
+        st.write(", ".join(config["country"]))
 
-    st.sidebar.subheader("⚙️ Operation:")
-    list(map(lambda o: st.sidebar.markdown(f"  - {o}"), [config["operation"]]))
+    with st.sidebar.expander("Operation"):
+        st.write(config["operation"])
+
 
 
     regionFiltered = filterByRegion(config, data)
