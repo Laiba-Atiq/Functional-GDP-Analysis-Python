@@ -21,23 +21,23 @@ if st.session_state.page == "init":
         try:
             with st.spinner("Loading GDP data..."): 
                 time.sleep(0.5) 
-                loadedData = loadGDPfile(filePath) 
-            st.write(":white_check_mark: GDP data loaded")
+                loadedData = loadGDPfile(filePath)     
+            st.write("✅ GDP data loaded successfully!")
 
             with st.spinner("Cleaning GDP data..."):
                 time.sleep(0.5)
                 cleanedData=dataCleaner(loadedData) 
-            st.write(":white_check_mark: GDP data cleaned") 
+            st.write("✅ GDP data cleaned successfully!") 
             
             with st.spinner("Reading configuration file..."): 
                 time.sleep(0.5) 
                 configDictionary = readConfigFile()
-            st.write(":white_check_mark: Configuration file read")
+            st.write("✅ Configuration file read successfully!")
             
             with st.spinner("Validating configuration file..."): 
                 time.sleep(0.5) 
                 configDictionary = validateConfig(configDictionary,cleanedData) 
-            st.write(":white_check_mark: Configuration file validated")
+            st.write("✅ Configuration file validated successfully!")
 
             status.update(label="Initialization complete", state="complete")
 
@@ -62,7 +62,7 @@ if st.session_state.page == "stats":
     st.title(":chart_with_upwards_trend: GDP STATISTICS")
 
     #sidebar
-    st.sidebar.title("🔧 Configuration:")
+    st.sidebar.title("CONFIGURATION:")
 
     with st.sidebar.expander("Regions"):
         st.write(", ".join(config["region"]))
