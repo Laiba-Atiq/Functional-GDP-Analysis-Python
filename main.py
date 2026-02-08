@@ -53,5 +53,20 @@ if st.session_state.page == "init":
             st.stop()
 
 if st.session_state.page == "stats":
+    
+    config = st.session_state.config
+    data = st.session_state.cleanedData
+    st.title(":chart_with_upwards_trend: GDP Statistics")
 
-    st.title(":bar_chart: GDP Statistics")
+    st.sidebar.title(":wrench: Configuration")
+    st.sidebar.subheader("Region:")
+    st.sidebar.write(", ".join(config["region"]))
+
+    st.sidebar.subheader("Year:")
+    st.sidebar.write(", ".join(map(str, config["year"])))
+
+    st.sidebar.subheader("Countries:")
+    st.sidebar.write(", ".join(config["country"]))
+
+    st.sidebar.subheader("Operation:")
+    st.sidebar.write(config["operation"])

@@ -1,5 +1,5 @@
 {
-  "region": ["Asia"],
+  "region": ["Asia","North America","South America"],
   "year": [2020],
   "country": ["Pakistan"],
   "operation": "average",
