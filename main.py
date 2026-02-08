@@ -6,7 +6,7 @@ from data_cleaner import dataCleaner
 from config_validator import validateConfig
 from data_filter import filterByRegion,filterByCountry
 from data_statistics import avgGdp,sumGdp
-from data_visuals import plotRegionGdp, plotCountryGdp
+from data_visuals import barChart,pieChart,lineChart,scatterChart 
 
 filePath="gdp_with_continent_filled.csv"
 
@@ -55,35 +55,60 @@ if st.session_state.page == "init":
             st.stop()
 
 if st.session_state.page == "stats":
-    
+
     config = st.session_state.config
     data = st.session_state.cleanedData
-    st.title(":chart_with_upwards_trend: GDP Statistics")
-    st.subheader("Region wise Statistics")
 
-    st.sidebar.title(":wrench: Configuration")
-    st.sidebar.subheader("Region:")
-    st.sidebar.write(", ".join(config["region"]))
+    st.title(":chart_with_upwards_trend: GDP STATISTICS")
 
-    st.sidebar.subheader("Year:")
-    st.sidebar.write(", ".join(map(str, config["year"])))
+    # ---------- SIDEBAR ----------
+    st.sidebar.title("🔧Configuration Settings")
 
-    st.sidebar.subheader("Countries:")
-    st.sidebar.write(", ".join(config["country"]))
+# Display regions
+    # Display regions
+    st.sidebar.subheader("🌍 Regions:")
+    list(map(lambda r: st.sidebar.markdown(f" - {r}"), config["region"]))  # ' ' is an em space (U+2003)
 
-    st.sidebar.subheader("Operation:")
-    st.sidebar.write(config["operation"])
 
-    regionFiltered=filterByRegion(config,data)
-    countryFiltered=filterByCountry(config,data)
+# Display years
+    st.sidebar.subheader("📅 Years:")
+    list(map(lambda y: st.sidebar.markdown(f" - {y}"), config["year"]))
 
-    if config["operation"]=='average':
-        countryComputedData, regionComputedData=avgGdp(countryFiltered,regionFiltered)
-        plotRegionGdp(regionComputedData,"(Average)")
-        st.subheader("Country wise Statistics")
-        plotCountryGdp(countryComputedData,"(Average)")
+# Display countries
+    st.sidebar.subheader("🏳️ Countries:")
+    list(map(lambda c: st.sidebar.markdown(f" - {c}"), config["country"]))
+
+# Display operations
+    st.sidebar.subheader("⚙️ Operation:")
+    list(map(lambda o: st.sidebar.markdown(f"  - {o}"), [config["operation"]]))
+
+
+    regionFiltered = filterByRegion(config, data)
+    countryFiltered = filterByCountry(config, data)
+
+    if config["operation"] == "average":
+        countryComputedData, regionComputedData = avgGdp(countryFiltered, regionFiltered)
+        op_label = "(Average)"
     else:
-        countryComputedData, regionComputedData=sumGdp(countryFiltered,regionFiltered)
-        plotRegionGdp(regionComputedData,"(Sum)")
-        st.subheader("Country wise Statistics")
-        plotCountryGdp(countryComputedData,"(Sum)")
+        countryComputedData, regionComputedData = sumGdp(countryFiltered, regionFiltered)
+        op_label = "(Sum)"
+
+    # ---- LAYOUT: 2x2 GRID ----
+    row1_col1, row1_col2 = st.columns(2)
+    row2_col1, row2_col2 = st.columns(2)
+
+    with row1_col1:
+        st.subheader("Region Graph 1")
+        barChart(regionComputedData, op_label)
+
+    with row1_col2:
+        st.subheader("Region Graph 2")
+        pieChart(regionComputedData, op_label)
+
+    with row2_col1:
+        st.subheader("Country Graph 1")
+        lineChart(countryComputedData, op_label)
+
+    with row2_col2:
+        st.subheader("Country Graph 2")
+        scatterChart(countryComputedData, op_label)

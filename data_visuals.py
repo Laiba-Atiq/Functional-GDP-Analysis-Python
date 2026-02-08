@@ -3,20 +3,7 @@ import streamlit as st
 
 import pandas as pd
 
-def prepareCountryData(df):
-    yearColumns = list(filter(str.isdigit, df.columns))
-
-    longDf = df.melt(id_vars=["Country Name"],value_vars=yearColumns,var_name="Year",value_name="GDP")
-
-    longDf["Year"] = longDf["Year"].astype(int)
-
-    resDf = df[[df.columns[0], df.columns[-1]]].copy()
-
-    return longDf,resDf
-
-
-def plotRegionGdp(regionDf, titleSuffix=""):
-    
+def barChart(regionDf, titleSuffix=""):
     #makes series of entire columns
     regions = regionDf.iloc[:, 0]  
     gdp = regionDf.iloc[:, 1]       
@@ -32,6 +19,13 @@ def plotRegionGdp(regionDf, titleSuffix=""):
 
     st.pyplot(fig_bar)
 
+    
+def pieChart(regionDf, titleSuffix=""):
+    
+    #makes series of entire columns
+    regions = regionDf.iloc[:, 0]  
+    gdp = regionDf.iloc[:, 1]       
+
     #pie chart
     fig_pie, ax_pie = plt.subplots()
     ax_pie.pie(gdp, labels=regions, autopct="%1.1f%%")
@@ -39,45 +33,64 @@ def plotRegionGdp(regionDf, titleSuffix=""):
 
     st.pyplot(fig_pie)
 
-def plotCountryGdp(wideDf, operation=""):
 
-    #line graph
-    fig_line, ax_line = plt.subplots()
+def prepareCountryData(df):
+    yearColumns = list(filter(str.isdigit, df.columns))
+    longDf = df.melt(
+        id_vars=["Country Name"],
+        value_vars=yearColumns,
+        var_name="Year",
+        value_name="GDP"
+    )
+    longDf["Year"] = longDf["Year"].astype(int)
+    resDf = df[[df.columns[0], df.columns[-1]]].copy()
+    return longDf, resDf
 
-    #scattergram
-    fig_gram,ax_gram=plt.subplots()
-
-    #easier to plot
-    longDf,results = prepareCountryData(wideDf)
+def lineChart(wideDf, titleSuffix="", column=None):
+    longDf, _ = prepareCountryData(wideDf)
     countries = longDf["Country Name"].unique()
 
+    fig, ax = plt.subplots()
     for country in countries:
         countryDf = longDf[longDf["Country Name"] == country]
-        ax_line.plot(
+        ax.plot(
             countryDf["Year"],
             countryDf["GDP"],
             linestyle="-",
-            label=country)
-        
-        #scatter plot
-        ax_gram.scatter(
+            label=country
+        )
+
+    ax.set_xlabel("Year")
+    ax.set_ylabel("GDP")
+    ax.set_title(f"GDP Trend Over Time {titleSuffix}")
+    ax.legend()
+    ax.grid(True)
+
+    if column:
+        column.pyplot(fig)
+    else:
+        st.pyplot(fig)
+
+def scatterChart(wideDf, titleSuffix="", column=None):
+    longDf, _ = prepareCountryData(wideDf)
+    countries = longDf["Country Name"].unique()
+
+    fig, ax = plt.subplots()
+    for country in countries:
+        countryDf = longDf[longDf["Country Name"] == country]
+        ax.scatter(
             countryDf["Year"],
             countryDf["GDP"],
             label=country
         )
 
-    ax_line.set_xlabel("Year")
-    ax_line.set_ylabel("GDP")
-    ax_line.set_title("GDP Trend Over Time")
-    ax_line.legend()
-    ax_line.grid(True)
+    ax.set_xlabel("Year")
+    ax.set_ylabel("GDP")
+    ax.set_title(f"GDP Values Over Time {titleSuffix}")
+    ax.legend()
+    ax.grid(True)
 
-    st.pyplot(fig_line)
-
-    ax_gram.set_xlabel("Year")
-    ax_gram.set_ylabel("GDP")
-    ax_gram.set_title("GDP Values Over Time")
-    ax_gram.legend()
-    ax_gram.grid(True)
-
-    st.pyplot(fig_gram)
+    if column:
+        column.pyplot(fig)
+    else:
+        st.pyplot(fig)
