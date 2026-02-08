@@ -4,6 +4,7 @@ import time
 from data_loader import loadGDPfile
 from config_reader import readConfigFile
 from data_cleaner import dataCleaner
+from config_validator import validateConfig
 
 filePath="gdp_with_continent_filled.csv"
 
@@ -20,6 +21,9 @@ with st.status("Initializing dashboard...", expanded=True) as status:
 
         configDictionary = readConfigFile()
         st.write("✅ Configuration file loaded")
+
+        configDictionary = validateConfig(configDictionary,cleanedData)
+        st.write("✅ Configuration file validated")
 
         status.update(label="Initialization complete", state="complete")
 

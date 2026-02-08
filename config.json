@@ -1,7 +1,7 @@
 {
-  "region": "South Asia",
-  "year": 2020,
-  "country": "Pakistan",
+  "region": ["Asia"],
+  "year": [2020],
+  "country": ["Pakistan"],
   "operation": "average",
   "output": "dashboard"
 }
