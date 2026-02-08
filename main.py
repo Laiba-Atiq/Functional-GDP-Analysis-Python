@@ -5,6 +5,9 @@ from data_loader import loadGDPfile
 from config_reader import readConfigFile
 from data_cleaner import dataCleaner
 from config_validator import validateConfig
+from data_filter import filterByRegion,filterByCountry
+from data_statistics import avgGdp,sumGdp
+from data_visuals import plotRegionGdp
 
 filePath="gdp_with_continent_filled.csv"
 
@@ -70,3 +73,13 @@ if st.session_state.page == "stats":
 
     st.sidebar.subheader("Operation:")
     st.sidebar.write(config["operation"])
+
+    regionFiltered=filterByRegion(config,data)
+    countryFiltered=filterByCountry(config,data)
+
+    if config["operation"]=='average':
+        countryComputedData, regionComputedData=avgGdp(countryFiltered,regionFiltered)
+        plotRegionGdp(regionComputedData,"(Average)")
+    else:
+        countryComputedData,regionComputedData=sumGdp(countryFiltered,regionFiltered)
+        plotRegionGdp(regionComputedData,"(Average)")
