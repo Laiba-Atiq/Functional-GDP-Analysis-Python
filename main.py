@@ -61,24 +61,18 @@ if st.session_state.page == "stats":
 
     st.title(":chart_with_upwards_trend: GDP STATISTICS")
 
-    # ---------- SIDEBAR ----------
+    #sidebar
     st.sidebar.title("🔧Configuration Settings")
 
-# Display regions
-    # Display regions
     st.sidebar.subheader("🌍 Regions:")
     list(map(lambda r: st.sidebar.markdown(f" - {r}"), config["region"]))  # ' ' is an em space (U+2003)
 
-
-# Display years
     st.sidebar.subheader("📅 Years:")
     list(map(lambda y: st.sidebar.markdown(f" - {y}"), config["year"]))
 
-# Display countries
     st.sidebar.subheader("🏳️ Countries:")
     list(map(lambda c: st.sidebar.markdown(f" - {c}"), config["country"]))
 
-# Display operations
     st.sidebar.subheader("⚙️ Operation:")
     list(map(lambda o: st.sidebar.markdown(f"  - {o}"), [config["operation"]]))
 
@@ -93,22 +87,22 @@ if st.session_state.page == "stats":
         countryComputedData, regionComputedData = sumGdp(countryFiltered, regionFiltered)
         op_label = "(Sum)"
 
-    # ---- LAYOUT: 2x2 GRID ----
+    # LAYOUT: 2x2 GRID 
     row1_col1, row1_col2 = st.columns(2)
     row2_col1, row2_col2 = st.columns(2)
 
     with row1_col1:
-        st.subheader("Region Graph 1")
+        st.subheader("Bar Chart")
         barChart(regionComputedData, op_label)
 
     with row1_col2:
-        st.subheader("Region Graph 2")
+        st.subheader("Pie Chart")
         pieChart(regionComputedData, op_label)
 
     with row2_col1:
-        st.subheader("Country Graph 1")
+        st.subheader("Line Chart")
         lineChart(countryComputedData, op_label)
 
     with row2_col2:
-        st.subheader("Country Graph 2")
+        st.subheader("Scattergram")
         scatterChart(countryComputedData, op_label)
