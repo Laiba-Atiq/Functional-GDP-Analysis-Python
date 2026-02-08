@@ -44,7 +44,7 @@ if st.session_state.page == "init":
             #saving data for next page
             st.session_state.cleanedData = cleanedData
             st.session_state.config = configDictionary
-            time.sleep(1)
+            time.sleep(0.5)
             #switch to statistics page
             st.session_state.page = "stats"
             st.rerun()
@@ -107,3 +107,15 @@ if st.session_state.page == "stats":
     with row2_col2:
         st.subheader("Scattergram")
         scatterChart(countryComputedData, op_label)
+
+
+    st.markdown("---")
+    st.subheader("Statistics Summary:")
+
+    st.write("### Region-wise GDP")
+    st.dataframe(regionComputedData)  
+    
+    st.write("### Country-wise GDP")
+    st.dataframe(countryComputedData) 
+
+     
