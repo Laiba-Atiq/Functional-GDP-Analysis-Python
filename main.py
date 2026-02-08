@@ -1,5 +1,4 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import time
 from data_loader import loadGDPfile
 from config_reader import readConfigFile
@@ -7,7 +6,7 @@ from data_cleaner import dataCleaner
 from config_validator import validateConfig
 from data_filter import filterByRegion,filterByCountry
 from data_statistics import avgGdp,sumGdp
-from data_visuals import plotRegionGdp
+from data_visuals import plotRegionGdp, plotCountryGdp
 
 filePath="gdp_with_continent_filled.csv"
 
@@ -60,6 +59,7 @@ if st.session_state.page == "stats":
     config = st.session_state.config
     data = st.session_state.cleanedData
     st.title(":chart_with_upwards_trend: GDP Statistics")
+    st.subheader("Region wise Statistics")
 
     st.sidebar.title(":wrench: Configuration")
     st.sidebar.subheader("Region:")
@@ -80,6 +80,10 @@ if st.session_state.page == "stats":
     if config["operation"]=='average':
         countryComputedData, regionComputedData=avgGdp(countryFiltered,regionFiltered)
         plotRegionGdp(regionComputedData,"(Average)")
+        st.subheader("Country wise Statistics")
+        plotCountryGdp(countryComputedData,"(Average)")
     else:
-        countryComputedData,regionComputedData=sumGdp(countryFiltered,regionFiltered)
-        plotRegionGdp(regionComputedData,"(Average)")
+        countryComputedData, regionComputedData=sumGdp(countryFiltered,regionFiltered)
+        plotRegionGdp(regionComputedData,"(Sum)")
+        st.subheader("Country wise Statistics")
+        plotCountryGdp(countryComputedData,"(Sum)")

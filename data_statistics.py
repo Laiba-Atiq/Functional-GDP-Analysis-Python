@@ -4,10 +4,11 @@ def sumGdp(dfc, dfr):
   #the dfc.columns iterates over column names and the for each string isdigit is checked and filtered
   #the str.isdigit only returns bool is not typecasting anything)
   yearColumns = list(filter(str.isdigit, dfc.columns))
+  dropColumns=["Indicator Name", "Indicator Code", "Country Code"]
 
   #assign adds the sum in data frame where as drop then removes all year columns
   resultCountry = dfc.assign(Sum_of_GDP=dfc[yearColumns].sum(axis=1))
-  resultCountry.drop(columns=yearColumns, inplace=True)
+  resultCountry.drop(columns=dropColumns, inplace=True)
   
   ########For regions########
   yearColumnsRegions = list(filter(str.isdigit, dfr.columns))
@@ -22,10 +23,11 @@ def avgGdp(dfc, dfr):
   
   ########For country########
   yearColumns = list(filter(str.isdigit, dfc.columns))
+  dropColumns=["Indicator Name", "Indicator Code", "Country Code"]
   sizeCountry=len(yearColumns)
 
   resultCountry = dfc.assign(Avg_of_GDP=(dfc[yearColumns].sum(axis=1))/sizeCountry)
-  resultCountry.drop(columns=yearColumns, inplace=True)
+  resultCountry.drop(columns=dropColumns, inplace=True)
 
   ########For regions########
   yearColumnsRegions = list(filter(str.isdigit, dfr.columns))
