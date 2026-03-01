@@ -11,17 +11,11 @@ def validateConfigFile(configDict):
         raise ValueError(f"Missing keys {missing} in config.json")
     
     #input type checks 
-    if not configDict["input"]:
-        raise TypeError("Error: input in config.json can't be empty")
-
     if not isinstance(configDict["input"], str):
         raise TypeError("Error: input in config.json must be a string")
     
     if configDict["input"] not in inputTypes:
         raise TypeError("Error: invalid input type")
-    
-    if not configDict["output"]:
-        raise TypeError("Error: output in config.json can't be empty")
     
     if not isinstance(configDict["output"], str):
         raise TypeError("Error: output in config.json must be a string")
@@ -29,11 +23,11 @@ def validateConfigFile(configDict):
     if configDict["output"] not in outputTypes:
         raise TypeError("Error: invalid output type")
     
-    if not configDict["continent"]:
-        raise TypeError("Error: continent in config.json can't be empty")
-    
     if not isinstance(configDict["continent"], str):
         raise TypeError("Error: continent in config.json must be a string")
+    
+    if not configDict["continent"]:
+        raise TypeError("Error: continent in config.json can't be empty")
     
     if not isinstance(configDict["startYear"], int):
         raise TypeError("Error: start year in config.json must be a integer")
