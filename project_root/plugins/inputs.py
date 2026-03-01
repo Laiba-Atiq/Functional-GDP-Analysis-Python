@@ -6,7 +6,6 @@ class CsvReader:
     def __init__(self, pipeline:PipelineService, csvFilePath: str):
         self.pipeline = pipeline
         self.csvFilePath = csvFilePath
-        self.read()
 
     def read(self):
         try:
@@ -22,10 +21,9 @@ class CsvReader:
             raise Exception(f"Error : {exp} in loading the {self.csvFilePath} file")
         
 class JsonReader:
-    def __init__(self, pipeline:PipelineService, jsonFilePath:str):
+    def __init__(self, jsonFilePath:str, pipeline:PipelineService):
         self.pipeline = pipeline
         self.jsonFilePath = jsonFilePath
-        self.read()
         
     def read(self):
         try:
@@ -38,4 +36,6 @@ class JsonReader:
         
         except Exception as exp:
             raise Exception(f"Error : {exp} in loading the {self.jsonFilePath} file")
+        
+inputDrivers={"csv":CsvReader,"json":JsonReader}
         

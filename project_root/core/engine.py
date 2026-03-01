@@ -1,12 +1,18 @@
-
+import pandas as pd
 
 class TransformationEngine:
-    # def __init__(self, sink: DataSink):
-    #     self.sink = sink
+    def __init__(self):
+        ...
 
-    def execute(self, raw_data: list[dict]):
-        # Step 1: Clean the raw data
-        #cleaned_data = data_cleaner(raw_data)
+    def dataCleaner(self, rawData):
+            newData=pd.DataFrame(rawData)
+
+            return newData
+
+    def execute(self, rawData: list[dict]):
+        #clean the raw data
+        cleanedData = self.dataCleaner(rawData)
+        print(cleanedData)
 
         # Step 2: Filter the data if needed
         #filtered_data = data_filter(cleaned_data)
