@@ -11,8 +11,8 @@ class CsvReader:
     def read(self):
         try:
             with open(self.csvFilePath, "r") as file:
-                raw_data = csv.DictReader(file)
-                data = list(raw_data)
+                rawData = csv.DictReader(file)
+                data = list(rawData)
                 self.pipeline.execute(data)
 
         except FileNotFoundError:
@@ -22,7 +22,7 @@ class CsvReader:
             raise Exception(f"Error : {exp} in loading the {self.csvFilePath} file")
         
 class JsonReader:
-    def __init__(self,pipeline:PipelineService, jsonFilePath:str):
+    def __init__(self, pipeline:PipelineService, jsonFilePath:str):
         self.pipeline = pipeline
         self.jsonFilePath = jsonFilePath
         self.read()
@@ -30,7 +30,6 @@ class JsonReader:
     def read(self):
         try:
             with open(self.jsonFilePath, "r") as file:
-                #requires data cleaning 
                 data = json.load(file)
                 self.pipeline.execute(data)  
 
@@ -39,6 +38,4 @@ class JsonReader:
         
         except Exception as exp:
             raise Exception(f"Error : {exp} in loading the {self.jsonFilePath} file")
-        
-inputDrivers = {"json": JsonReader, "csv": CsvReader}
         
