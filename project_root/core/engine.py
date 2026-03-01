@@ -7,9 +7,7 @@ class TransformationEngine:
     def dataCleaner(self, rawData):
         #converting the data into a data frame
         df = pd.DataFrame(rawData)
-        
-        print(df)
-
+    
         before=len(df)
 
         yearCols=list(filter(str.isdigit,df.columns))
@@ -34,8 +32,7 @@ class TransformationEngine:
     def execute(self, rawData: list[dict]):
         #clean the raw data
         cleanedData = self.dataCleaner(rawData)
-        print(cleanedData)
-
+       
         # Step 2: Filter the data if needed
         #filtered_data = data_filter(cleaned_data)
 

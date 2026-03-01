@@ -3,7 +3,7 @@ import json as json
 from core.contracts import PipelineService
 
 class CsvReader:
-    def __init__(self, pipeline:PipelineService, csvFilePath: str):
+    def __init__(self, csvFilePath: str, pipeline:PipelineService):
         self.pipeline = pipeline
         self.csvFilePath = csvFilePath
 
