@@ -1,7 +1,7 @@
 {
-  "region": ["Asia","North America","South America"],
-  "year": [2020],
-  "country": ["Pakistan","India"],
-  "operation": "average",
-  "output": "dashboard"
+  "input": "csv",
+  "output": "file",
+  "continent": "Asia",
+  "startYear": 1996,
+  "endYear": 2023
 }
