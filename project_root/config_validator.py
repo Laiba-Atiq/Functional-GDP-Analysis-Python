@@ -2,6 +2,8 @@
 def validateConfigFile(configDict):
 
     keyList = ["input", "output", "continent", "startYear", "endYear"]
+    inputTypes=["csv","json"]
+    outputTypes=["file","console"]
 
     #checking if all the required keys exist
     if not all(map(lambda k : k in configDict, keyList)):
@@ -15,11 +17,17 @@ def validateConfigFile(configDict):
     if not isinstance(configDict["input"], str):
         raise TypeError("Error: input in config.json must be a string")
     
+    if configDict["input"] not in inputTypes:
+        raise TypeError("Error: invalid input type")
+    
     if not configDict["output"]:
         raise TypeError("Error: output in config.json can't be empty")
     
     if not isinstance(configDict["output"], str):
         raise TypeError("Error: output in config.json must be a string")
+    
+    if configDict["output"] not in outputTypes:
+        raise TypeError("Error: invalid output type")
     
     if not configDict["continent"]:
         raise TypeError("Error: continent in config.json can't be empty")
