@@ -5,9 +5,31 @@ class TransformationEngine:
         ...
 
     def dataCleaner(self, rawData):
-            newData=pd.DataFrame(rawData)
+        #converting the data into a data frame
+        df = pd.DataFrame(rawData)
+        
+        print(df)
 
-            return newData
+        before=len(df)
+
+        yearCols=list(filter(str.isdigit,df.columns))
+        otherCols=list(filter(lambda col: col not in yearCols, df.columns))
+        
+        df[yearCols] = df[yearCols].apply(pd.to_numeric, errors='coerce').astype(float)
+        df = df.dropna(subset=yearCols, how='all')
+
+        df[otherCols]=df[otherCols].apply(lambda col: col.str.strip())
+
+        mask = ((df[otherCols].notna()) & (df[otherCols] != ""))
+        
+        #only return rows with all true rows
+        df=df[mask.all(axis=1)]
+
+        after=len(df)
+
+        print(f"Removed number of rows {before-after}")
+
+        return df
 
     def execute(self, rawData: list[dict]):
         #clean the raw data
@@ -21,4 +43,4 @@ class TransformationEngine:
         #stats = data_statistics(filtered_data)
 
         # Step 4: Send the processed results to the Output module
-        #self.sink.write(stats)
+        #self.sink.writereturn newDat(stats)
