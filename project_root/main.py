@@ -91,6 +91,7 @@ if st.session_state.page == "stats":
     # LAYOUT: 2x2 GRID 
     row1_col1, row1_col2 = st.columns(2)
     row2_col1, row2_col2 = st.columns(2)
+    row3_col1,row3_col2=st.columns(2)
 
     with row1_col1:
         st.subheader("Bar Chart")
