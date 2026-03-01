@@ -1,5 +1,5 @@
 {
-  "input": "csv",
+  "input": "json",
   "output": "file",
   "continent": "Asia",
   "startYear": 1996,

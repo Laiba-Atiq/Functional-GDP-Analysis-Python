@@ -1,32 +1,17 @@
-import streamlit as st
-import time
 from config_reader import readConfigFile
 from config_validator import validateConfigFile
+from plugins.inputs import inputDrivers
 
-filePath="gdp_with_continent_filled.csv"
+filePaths={"csv":"data\\gdp_with_continent_filled.csv","json":"data\\gdp_with_continent_filled.json"}
 
-#setting up dashboard
-st.set_page_config(page_title="GDP Analysis",page_icon=":bar_chart:",layout="wide")
+configDictionary = readConfigFile()
+print("DONE 1")
 
-if "page" not in st.session_state:
-    st.session_state.page = "init"
+configDictionary = validateConfigFile(configDictionary)
+print("DONE 2")
 
-if st.session_state.page == "init":
-    with st.status("Initializing dashboard...", expanded=True) as status:
-        try:
-            with st.spinner("Reading configuration file..."): 
-                time.sleep(0.5) 
-                configDictionary = readConfigFile()
-            st.write("✅ Configuration file read successfully!")
-            
-            with st.spinner("Validating configuration file..."): 
-                time.sleep(0.5) 
-                configDictionary = validateConfigFile(configDictionary) 
-            st.write("✅ Configuration file validated successfully!")
+reader=inputDrivers[configDictionary["input"]](filePaths[configDictionary["input"]])
+reader.read()
 
-            status.update(label="Initialization complete", state="complete")
 
-        except Exception as exp:
-            status.update(label="Initialization failed", state="error")
-            st.exception(exp)
-            st.stop()
+
