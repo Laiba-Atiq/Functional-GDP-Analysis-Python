@@ -3,7 +3,7 @@ import json as json
 from core.contracts import PipelineService
 
 class CsvReader:
-    def __init__(self,pipeline:PipelineService, csvFilePath: str):
+    def __init__(self, pipeline:PipelineService, csvFilePath: str):
         self.pipeline = pipeline
         self.csvFilePath = csvFilePath
         self.read()
@@ -30,6 +30,7 @@ class JsonReader:
     def read(self):
         try:
             with open(self.jsonFilePath, "r") as file:
+                #requires data cleaning 
                 data = json.load(file)
                 self.pipeline.execute(data)  
 
