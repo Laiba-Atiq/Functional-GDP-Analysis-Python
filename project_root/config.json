@@ -2,6 +2,6 @@
   "input": "csv",
   "output": "file",
   "continent": "Asia",
-  "startYear": 1996,
+  "startYear": 2022,
   "endYear": 2023
 }

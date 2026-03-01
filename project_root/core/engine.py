@@ -1,8 +1,8 @@
 import pandas as pd
 
 class TransformationEngine:
-    def __init__(self):
-        ...
+    def __init__(self, configDictionary: dict):
+        self.configDict=configDictionary
 
     def dataCleaner(self, rawData):
         #converting the data into a data frame
@@ -25,16 +25,36 @@ class TransformationEngine:
 
         after=len(df)
 
-        print(f"Removed number of rows {before-after}")
+        #print(f"Removed number of rows {before-after}")
 
         return df
+    
+    def dataFilter(self, df):
+        yearCols=list(filter(str.isdigit,df.columns))
+
+        #boolean series checks rows
+        df = df[df["Continent"] == (self.configDict["continent"])]
+        if df.empty:
+            raise ValueError("The continent in configuration file is not in data")
+        
+        rangeYears=list(map(str,range(self.configDict["startYear"],(self.configDict["endYear"]+1))))
+        if not all (map(lambda r: r in yearCols, rangeYears)):
+            raise ValueError("The years specified in configuration file are not in data")
+        
+        #checks all columns
+        dfFirst = df[["Country Name"] + rangeYears + ["Continent"]]
+        
+        dfSec = df[["Country Name",str(self.configDict["endYear"]),"Continent"]]
+        
+        return dfSec,dfFirst
+    
 
     def execute(self, rawData: list[dict]):
-        #clean the raw data
+        #cleaning the raw data
         cleanedData = self.dataCleaner(rawData)
        
-        # Step 2: Filter the data if needed
-        #filtered_data = data_filter(cleaned_data)
+        #filtering the cleaned data
+        filteredData = self.dataFilter(cleanedData)
 
         # Step 3: Compute statistics
         #stats = data_statistics(filtered_data)
