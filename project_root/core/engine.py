@@ -54,16 +54,9 @@ class TransformationEngine:
     
     def execute(self, rawData: list[dict]):
         cleanedData = self.dataCleaner(rawData)   
-        #cleaning the raw data
-        cleanedData = self.dataCleaner(rawData)
-       
-        #filtering the cleaned datas
+     
         Firstdf,Secdf = self.dataFilter(cleanedData)
-        stats = self.dataStatistics(Firstdf,Secdf)
-        self.sink.write(stats)
-
-
-        #compute statistics
+    
         stats1,stats2,stats3,stats4,stats5,stats6,stats7,stats8 = self.dataStatistics(Firstdf,Secdf)
 
         self.sink.write(stats1,stats2,stats3,stats4,stats5,stats6,stats7,stats8)
