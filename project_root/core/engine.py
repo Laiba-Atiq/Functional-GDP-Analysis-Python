@@ -23,9 +23,11 @@ class TransformationEngine:
     
 
     def data_statistics(self, filtered_data1, filtered_data2):
+        startYear = str(self.configDict["startYear"])
+        endYear = str(self.configDict["endYear"])
 
         continent = self.configDict["continent"]
-        continent_df = filtered_data1.sort_values(by = "2024", ascending = False)
+        continent_df = filtered_data1.sort_values(by = endYear, ascending = False)
 
         #Top 10 Countries by GDP for the given continent & year
         top10 = continent_df.head(10)
@@ -34,8 +36,6 @@ class TransformationEngine:
         bottom10 = continent_df.tail(10)
 
         #GDP Growth Rate of Each Country in the given continent for the given data range
-        startYear = str(self.configDict["startYear"])
-        endYear = str(self.configDict["endYear"])
 
         filtered_data3 = filtered_data2[filtered_data2["Continent"] == continent]
         growthRateSeries = ((filtered_data3[endYear] - filtered_data3[startYear]) / filtered_data3[startYear]) * 100
@@ -49,11 +49,12 @@ class TransformationEngine:
         yearCols = list(map(lambda y: str(y), range (int(startYear), int(endYear)+1, +1)))
         filtered_data2["Sum of GDP"] = filtered_data2[yearCols].sum(axis = 1)
 
-        grpByContinent = filtered_data2.groupby("Continent")
-        averageGDPSeries = grpByContinent["Sum of GDP"].mean()                
-
+        averageGDPSeries = filtered_data2.groupby("Continent")["Sum of GDP"].mean()                
                                                                         #averageGDPSeries is a pandas Series that came from the groupby().mean() operation.Its index is the continent names.Its values are the average GDPs.
         AverageGDP = averageGDPSeries.reset_index()
         AverageGDP.rename(columns={"Sum of GDP": "Average GDP"}, inplace=True)
         
-        
+        #Total Global GDP Trend for given date range
+        globalGDPTrend = filtered_data2[yearCols].sum()
+
+        return top10
