@@ -22,21 +22,20 @@ class TransformationEngine:
 
     
 
-    def data_statistics(self, filtered_data1, filtered_data2):
+    def dataStatistics(self, filtered_data1, filtered_data2):
         startYear = str(self.configDict["startYear"])
         endYear = str(self.configDict["endYear"])
 
         continent = self.configDict["continent"]
         continent_df = filtered_data1.sort_values(by = endYear, ascending = False)
 
-        #Top 10 Countries by GDP for the given continent & year
+        #1. Top 10 Countries by GDP for the given continent & year
         top10 = continent_df.head(10)
 
-        #Bottom 10 Countries by GDP for the given continent & year
+        #2. Bottom 10 Countries by GDP for the given continent & year
         bottom10 = continent_df.tail(10)
 
-        #GDP Growth Rate of Each Country in the given continent for the given data range
-
+        #3. GDP Growth Rate of Each Country in the given continent for the given data range
         filtered_data3 = filtered_data2[filtered_data2["Continent"] == continent]
         growthRateSeries = ((filtered_data3[endYear] - filtered_data3[startYear]) / filtered_data3[startYear]) * 100
 
@@ -45,7 +44,7 @@ class TransformationEngine:
             "GDP Growth Rate" : growthRateSeries
         })
 
-        #Average GDP by Continent for given date range
+        #4. Average GDP by Continent for given date range
         yearCols = list(map(lambda y: str(y), range (int(startYear), int(endYear)+1, +1)))
         filtered_data2["Sum of GDP"] = filtered_data2[yearCols].sum(axis = 1)
 
@@ -54,7 +53,28 @@ class TransformationEngine:
         AverageGDP = averageGDPSeries.reset_index()
         AverageGDP.rename(columns={"Sum of GDP": "Average GDP"}, inplace=True)
         
-        #Total Global GDP Trend for given date range
+        #5. Total Global GDP Trend for given date range
         globalGDPTrend = filtered_data2[yearCols].sum()
+        globalGDPTrendDF = globalGDPTrend.reset_index()   #converts back to dataframe
+        globalGDPTrendDF.columns = ["Year", "Global GDP"]
 
-        return top10
+        #6. Fastest Growing Continent for the given date range 
+        growthRateOfContinents = filtered_data2.groupby("Continent")[[startYear, endYear]].sum()
+        growthRateOfContinents["GDP Growth Rate(Continent Wise)"] = (growthRateOfContinents[endYear] - growthRateOfContinents[startYear])/ growthRateOfContinents[startYear] * 100
+
+        GDPgrowthRateOfContinents = growthRateOfContinents[["GDP Growth Rate(Continent Wise)"]].reset_index()    
+        FastestGrowing = GDPgrowthRateOfContinents.loc[       #use .loc to select a row by index:
+            GDPgrowthRateOfContinents["GDP Growth Rate(Continent Wise)"].idxmax()
+        ]    
+              # GDPgrowthRateOfContinents for graphs and FastestGrowing for console writer
+
+        #7. Countries with Consistent GDP Decline in Last x Years 
+        diffYears = filtered_data2[yearCols].diff(axis = 1)
+        maskYears = diffYears.iloc[:, 1:].lt(0).all(axis=1)   #lt(0)->less than 0
+        decline = filtered_data2[maskYears]
+        decliningCountries = decline[["Country Name"] + yearCols]   #make line/scatter plot
+
+        #8. Contribution of Each Continent to Global GDP for given data range
+        globalGDPPerContinent = filtered_data2.groupby("Continent")["Sum of GDP"].sum()
+        globalGDPPerContinent = globalGDPPerContinent.reset_index()
+        globalGDPPerContinent.rename(columns={"Sum of GDP": "Contribution to Global GDP"}, inplace=True)
