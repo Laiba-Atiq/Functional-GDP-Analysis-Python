@@ -124,10 +124,10 @@ python main.py
 You can find the full PlantUML file here: [`architecture.puml`](architecture.puml)
 
 ### Class Diagram
-![Class Diagram](data/classDiagram.png)
+![Class Diagram](project_root/data/classDiagram.png)
 
 ### Graphical Representation
-![Graphical UML](data/umlGraphical.png)
+![Graphical UML](project_root/data/umlGraphical.png)
 
 ---
 
