@@ -7,10 +7,7 @@ class TransformationEngine:
     def __init__(self, configDictionary: dict, sink: DataSink):
         self.configDict = configDictionary
         self.sink = sink
-    def __init__(self, configDictionary: dict, sink: DataSink):
-        self.configDict = configDictionary
-        self.sink = sink
-
+   
     def dataCleaner(self, rawData):
         #converting the data into a data frame
         df = pd.DataFrame(rawData)
@@ -56,20 +53,11 @@ class TransformationEngine:
         return dfSec,dfFirst
     
     def execute(self, rawData: list[dict]):
-        #cleaning the raw data
-        cleanedData = self.dataCleaner(rawData)
-       
-        #filtering the cleaned data
+        cleanedData = self.dataCleaner(rawData)   
         Firstdf,Secdf = self.dataFilter(cleanedData)
-
-        #compute statistics
         stats = self.dataStatistics(Firstdf,Secdf)
+        self.sink.write(stats)
 
-        # Step 4: Send the processed results to the Output module
-        #self.sink.writereturn newDat(stats)
-        #self.sink.write(stats)
-
-    
 
     def dataStatistics(self, filtered_data1, filtered_data2):
         startYear = str(self.configDict["startYear"])
