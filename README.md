@@ -1,4 +1,4 @@
-# 🏗 Modular Orchestration & Dependency Inversion | Python Project
+# Modular Orchestration & Dependency Inversion | Python Project
 
 Transition from a script-based approach to a **modular architecture** using **Dependency Inversion Principle (DIP)**.  
 This project decouples the system so that the **Core module** remains agnostic of data persistence and ingestion details.
