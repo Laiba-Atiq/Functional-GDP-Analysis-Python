@@ -1,4 +1,5 @@
 import pandas as pd
+from core.contracts import DataSink
 
 class TransformationEngine:
     def __init__(self, configDictionary: dict):
@@ -31,11 +32,6 @@ class TransformationEngine:
     
     def dataFilter(self, df):
         yearCols=list(filter(str.isdigit,df.columns))
-
-        #boolean series checks rows
-        df = df[df["Continent"] == (self.configDict["continent"])]
-        if df.empty:
-            raise ValueError("The continent in configuration file is not in data")
         
         rangeYears=list(map(str,range(self.configDict["startYear"],(self.configDict["endYear"]+1))))
         if not all (map(lambda r: r in yearCols, rangeYears)):
@@ -43,6 +39,11 @@ class TransformationEngine:
         
         #checks all columns
         dfFirst = df[["Country Name"] + rangeYears + ["Continent"]]
+
+        #boolean series checks rows
+        df = df[df["Continent"] == (self.configDict["continent"])]
+        if df.empty:
+            raise ValueError("The continent in configuration file is not in data")
         
         dfSec = df[["Country Name",str(self.configDict["endYear"]),"Continent"]]
         
