@@ -18,10 +18,10 @@ package "Core Module" {
         -configDict : dict
         -sink : DataSink
         +__init__(configDictionary: dict, sink: DataSink)
-        +execute(rawData: list[dict]) : None
+        +execute(rawData: list[dict])
+        -dataStatistics(filtered_data1, filtered_data2)
         -dataCleaner(rawData)
         -dataFilter(df)
-        -dataStatistics(filtered_data1, filtered_data2)
     }
 
     TransformationEngine ..|> PipelineService
@@ -34,14 +34,14 @@ package "Input Module" {
         -pipeline : PipelineService
         -csvFilePath : str
         +__init__(pipeline: PipelineService, csvFilePath: str)
-        +read() : None
+        +read()
     }
 
     class JsonReader {
         -pipeline : PipelineService
         -jsonFilePath : str
         +__init__(pipeline: PipelineService, jsonFilePath: str)
-        +read() : None
+        +read()
     }
 
     CsvReader --> PipelineService
@@ -60,7 +60,19 @@ package "Output Module" {
         -configDict : dict
         +__init__(configDictionary: dict)
         +setupOutputPage()
+        +horizontalbar(pos,output,statement)
+        +barchart(pos,output)
+        +lollipopgraph(pos,output)
+        +donutgraph(pos,output)
+        +linegraph(pos,output)
+        +barandline(pos,output)
+        +slopgraph(pos,output)
         +write(output1,output2,output3,output4,output5,output6,output7,output8)
+    }
+
+    class outputDrivers {
+        +console : ConsoleWriter
+        +file : GraphicsChartWriter
     }
 
     ConsoleWriter ..|> DataSink
