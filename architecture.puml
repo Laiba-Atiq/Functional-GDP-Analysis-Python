@@ -1,0 +1,85 @@
+@startuml
+title GDP Processing Pipeline Architecture
+
+left to right direction
+skinparam packageStyle rectangle
+
+package "Core Module" {
+
+    interface PipelineService {
+        +execute(data: List[Any]) : None
+    }
+
+    interface DataSink {
+        +write(records: List[dict]) : None
+    }
+
+    class TransformationEngine {
+        -configDict : dict
+        -sink : DataSink
+        +__init__(configDictionary: dict, sink: DataSink)
+        +execute(rawData: list[dict]) : None
+        -dataCleaner(rawData)
+        -dataFilter(df)
+        -dataStatistics(filtered_data1, filtered_data2)
+    }
+
+    TransformationEngine ..|> PipelineService
+    TransformationEngine --> DataSink
+}
+
+package "Input Module" {
+
+    class CsvReader {
+        -pipeline : PipelineService
+        -csvFilePath : str
+        +__init__(pipeline: PipelineService, csvFilePath: str)
+        +read() : None
+    }
+
+    class JsonReader {
+        -pipeline : PipelineService
+        -jsonFilePath : str
+        +__init__(pipeline: PipelineService, jsonFilePath: str)
+        +read() : None
+    }
+
+    CsvReader --> PipelineService
+    JsonReader --> PipelineService
+}
+
+package "Output Module" {
+
+    class ConsoleWriter {
+        -configDict : dict
+        +__init__(configDictionary: dict)
+        +write(output1,output2,output3,output4,output5,output6,output7,output8)
+    }
+
+    class GraphicsChartWriter {
+        -configDict : dict
+        +__init__(configDictionary: dict)
+        +setupOutputPage()
+        +write(output1,output2,output3,output4,output5,output6,output7,output8)
+    }
+
+    ConsoleWriter ..|> DataSink
+    GraphicsChartWriter ..|> DataSink
+}
+
+package "Application Entry Point" {
+
+    class Main {
+        +createSink()
+        +createEngine()
+        +createReader()
+    }
+
+    Main --> TransformationEngine
+    Main --> CsvReader
+    Main --> JsonReader
+    Main --> ConsoleWriter
+    Main --> GraphicsChartWriter
+}
+
+@enduml

@@ -6,13 +6,12 @@ class TransformationEngine:
         self.configDict = configDictionary
         self.sink = sink
 
-    def execute(self, raw_data: list[dict]):
+    def execute(self, rawData: list[dict]):
         # Step 1: Clean the raw data
-        cleaned_data = self.data_cleaner(raw_data)
+        cleanedData = self.dataCleaner(rawData)
 
         # Step 2: Filter the data if needed
-        filtered_data1 = self.data_filter(cleaned_data)
-        filtered_data2 = self.data_filter(cleaned_data)
+        filtered_data1, filtered_data2 = self.dataFilter(cleanedData)
 
         # Step 3: Compute statistics
         stats = self.data_statistics(filtered_data1, filtered_data2)
@@ -27,13 +26,13 @@ class TransformationEngine:
         endYear = str(self.configDict["endYear"])
 
         continent = self.configDict["continent"]
-        continent_df = filtered_data1.sort_values(by = endYear, ascending = False)
+        continentDf = filtered_data1.sort_values(by = endYear, ascending = False)
 
         #1. Top 10 Countries by GDP for the given continent & year
-        top10 = continent_df.head(10)
+        top10 = continentDf.head(10)
 
         #2. Bottom 10 Countries by GDP for the given continent & year
-        bottom10 = continent_df.tail(10)
+        bottom10 = continentDf.tail(10)
 
         #3. GDP Growth Rate of Each Country in the given continent for the given data range
         filtered_data3 = filtered_data2[filtered_data2["Continent"] == continent]
@@ -41,6 +40,7 @@ class TransformationEngine:
 
         growthRate = pd.DataFrame({
             "Country" : filtered_data3["Country Name"],
+            "Code":filtered_data3["Country Code"],
             "GDP Growth Rate" : growthRateSeries
         })
 
@@ -66,7 +66,11 @@ class TransformationEngine:
         FastestGrowing = GDPgrowthRateOfContinents.loc[       #use .loc to select a row by index:
             GDPgrowthRateOfContinents["GDP Growth Rate(Continent Wise)"].idxmax()
         ]    
-              # GDPgrowthRateOfContinents for graphs and FastestGrowing for console writer
+
+        temp = filtered_data2.groupby("Continent")[yearCols].sum()
+        temp = temp.reset_index()
+        temp = (temp[temp["Continent"] == FastestGrowing["Continent"]])
+        temp["GDP Growth Rate"] = FastestGrowing["GDP Growth Rate(Continent Wise)"]
 
         #7. Countries with Consistent GDP Decline in Last x Years 
         diffYears = filtered_data2[yearCols].diff(axis = 1)
@@ -78,3 +82,5 @@ class TransformationEngine:
         globalGDPPerContinent = filtered_data2.groupby("Continent")["Sum of GDP"].sum()
         globalGDPPerContinent = globalGDPPerContinent.reset_index()
         globalGDPPerContinent.rename(columns={"Sum of GDP": "Contribution to Global GDP"}, inplace=True)
+
+        return top10, bottom10, growthRate, AverageGDP, globalGDPTrendDF, temp, decliningCountries, globalGDPPerContinent
