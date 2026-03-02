@@ -39,26 +39,13 @@ class TransformationEngine:
             raise ValueError("The years specified in configuration file are not in data")
         
         #checks all columns
-        dfFirst = df[["Country Name"] + rangeYears + ["Continent"]]
+        dfFirst = df[["Country Name"] + rangeYears + ["Continent"] + ["Country Code"]]
 
         #boolean series checks rows
         df = df[df["Continent"] == (self.configDict["continent"])]
         if df.empty:
             raise ValueError("The continent in configuration file is not in data")
         
-        dfSec = df[["Country Name",str(self.configDict["endYear"]),"Continent"]]
+        dfSec = df[["Country Name",str(self.configDict["endYear"]),"Continent","Country Code"]]
         
         return dfSec,dfFirst
-    
-    def execute(self, rawData: list[dict]):
-        #cleaning the raw data
-        cleanedData = self.dataCleaner(rawData)
-       
-        #filtering the cleaned data
-        Firstdf,Secdf = self.dataFilter(cleanedData)
-
-        #compute statistics
-        stats = self.dataStatistics(Firstdf,Secdf)
-
-        # Step 4: Send the processed results to the Output module
-        #self.sink.writereturn newDat(stats)

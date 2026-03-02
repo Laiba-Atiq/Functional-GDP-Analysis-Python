@@ -10,7 +10,7 @@ configDictionary = readConfigFile()
 
 configDictionary = validateConfigFile(configDictionary)
 
-sink=outputDrivers[configDictionary["output"]]
+sink=outputDrivers[configDictionary["output"]](configDictionary)
 engine=TransformationEngine(configDictionary, sink=sink)
 reader=inputDrivers[configDictionary["input"]](filePaths[configDictionary["input"]], pipeline=engine)
 reader.read()
