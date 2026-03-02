@@ -49,3 +49,16 @@ class TransformationEngine:
         dfSec = df[["Country Name",str(self.configDict["endYear"]),"Continent","Country Code"]]
         
         return dfSec,dfFirst
+    
+    def execute(self, rawData: list[dict]):
+        #cleaning the raw data
+        cleanedData = self.dataCleaner(rawData)
+       
+        #filtering the cleaned data
+        Firstdf,Secdf = self.dataFilter(cleanedData)
+
+        #compute statistics
+        stats = self.dataStatistics(Firstdf,Secdf)
+
+        #send the processed results to the output module
+        self.sink.write(stats)
