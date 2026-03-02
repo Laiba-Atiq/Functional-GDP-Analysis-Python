@@ -130,5 +130,4 @@ class TransformationEngine:
         globalGDPPerContinent.rename(columns={"Sum of GDP": "Contribution to Global GDP"}, inplace=True)
 
         return top10, bottom10, growthRate, AverageGDP, globalGDPTrendDF, temp, decliningCountries, globalGDPPerContinent
-        #send the processed results to the output module
-        self.sink.write(stats1,stats2,stats3,stats4,stats5,stats6,stats7,stats8)
+        
