@@ -100,13 +100,13 @@ project_root/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/modular-orchestration.git
+git clone https://github.com/Laiba-Atiq/Functional-GDP-Analysis-Python.git
 ````
 
 2. Navigate to the project folder:
 
 ```bash
-cd modular-orchestration
+cd project_root
 ```
 
 3. Run the main orchestrator:
