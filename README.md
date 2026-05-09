@@ -103,19 +103,13 @@ project_root/
 git clone https://github.com/Laiba-Atiq/Functional-GDP-Analysis-Python.git
 ````
 
-2. Navigate to the project folder:
+2. Run the main orchestrator:
 
 ```bash
-cd project_root
+streamlit run project_root/main.py
 ```
 
-3. Run the main orchestrator:
-
-```bash
-python main.py
-```
-
-4. The program will process data according to `config.json` and generate outputs in the chosen sinks.
+3. The program will process data according to `config.json` and generate outputs in the chosen sinks.
 
 ---
 
