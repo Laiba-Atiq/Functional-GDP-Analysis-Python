@@ -1,6 +1,6 @@
 import json as j
 
-def readConfigFile(dataFilePath = "config.json"):
+def readConfigFile(dataFilePath = "project_root/config.json"):
     try:
         with open (dataFilePath, "r") as file:
             configDict = j.load(file)

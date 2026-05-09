@@ -4,7 +4,7 @@ from plugins.inputs import inputDrivers
 from plugins.outputs import outputDrivers
 from core.engine import TransformationEngine
 
-filePaths={"csv":"data\\gdp_with_continent_filled.csv","json":"data\\gdp_with_continent_filled.json"}
+filePaths={"csv":"project_root\\data\\gdp_with_continent_filled.csv","json":"data\\gdp_with_continent_filled.json"}
 
 configDictionary = readConfigFile()
 
